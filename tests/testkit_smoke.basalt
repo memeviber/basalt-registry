@@ -1,14 +1,35 @@
 include "../packages/testkit/0.1.0/src/testkit.basalt"
 
 func main(): int {
+  let total: int = 0;
   let failures: int = 0;
-  if testkit::check_int(2 + 2, 4) == 0 then failures += 1;
-  if testkit::check_bool(true, true) == 0 then failures += 1;
-  if testkit::check_char('b', 'b') == 0 then failures += 1;
-  if testkit::check_string("basalt", "basalt") == 0 then failures += 1;
-  if testkit::check_between(7, 1, 10) == 0 then failures += 1;
-  if testkit::check_not_int(7, 8) == 0 then failures += 1;
-  if testkit::check_int(2 + 2, 5) != 0 then failures += 1;
-  if testkit::check_string("left", "right") != 0 then failures += 1;
-  return failures;
+
+  total += 1;
+  failures += testkit::run("test_int_equality", testkit::assert_int(2 + 2, 4));
+
+  total += 1;
+  failures += testkit::run("test_bool_equality", testkit::assert_bool(true, true));
+
+  total += 1;
+  failures += testkit::run("test_char_equality", testkit::assert_char('b', 'b'));
+
+  total += 1;
+  failures += testkit::run("test_string_equality", testkit::assert_string("basalt", "basalt"));
+
+  total += 1;
+  failures += testkit::run("test_inclusive_range", testkit::assert_between(7, 1, 10));
+
+  total += 1;
+  failures += testkit::run("test_not_equal", testkit::assert_not_int(7, 8));
+
+  total += 1;
+  failures += testkit::run("test_float_tolerance", testkit::assert_f64_close(3.14159, 3.1416, 0.0001));
+
+  total += 1;
+  failures += testkit::run("test_rejects_int_mismatch", testkit::assert_true(testkit::assert_int(2, 5) == 0));
+
+  total += 1;
+  failures += testkit::run("test_rejects_string_mismatch", testkit::assert_true(testkit::assert_string("left", "right") == 0));
+
+  return testkit::summary(total, failures);
 }

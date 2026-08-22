@@ -3,53 +3,120 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="testkit 0.1.0: pytest-inspired assertions and reporting for Basalt.">
   <title>testkit 0.1.0 · Basalt Registry</title>
-  <style>
-    :root { color-scheme: light; --ink: #18212f; --muted: #5d6978; --line: #d9e1ea; --bg: #f5f7fb; --panel: #fff; --accent: #6d2d91; }
-    * { box-sizing: border-box; }
-    body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 system-ui, sans-serif; }
-    main { width: min(820px, calc(100% - 32px)); margin: 0 auto; padding: 56px 0 72px; }
-    a { color: var(--accent); font-weight: 650; }
-    h1 { margin: 10px 0 0; font-size: clamp(2.2rem, 6vw, 4rem); line-height: 1; letter-spacing: -0.05em; }
-    h2 { margin-top: 34px; }
-    .muted { color: var(--muted); }
-    .panel { margin-top: 28px; padding: 26px; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; }
-    code, pre { font-family: "SFMono-Regular", Consolas, monospace; }
-    code { padding: 2px 5px; border-radius: 5px; background: #eef1f5; }
-    pre { overflow-x: auto; padding: 16px; border-radius: 10px; background: #202938; color: #edf2f7; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 10px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
-    th { color: var(--muted); font-size: 0.84rem; text-transform: uppercase; letter-spacing: 0.08em; }
-  </style>
+  <link rel="stylesheet" href="../../../style.css">
 </head>
 <body>
-  <main>
-    <a href="../../../">← Basalt Registry</a>
-    <h1>testkit <span class="muted">0.1.0</span></h1>
-    <p class="muted">A dependency-free assertion library for Basalt examples and package tests.</p>
-    <section class="panel">
-      <h2>API</h2>
-      <table>
-        <thead><tr><th>Function</th><th>Result</th></tr></thead>
-        <tbody>
-          <tr><td><code>check_int(actual, expected)</code></td><td><code>1</code> when integer values are equal.</td></tr>
-          <tr><td><code>check_bool(actual, expected)</code></td><td><code>1</code> when boolean values are equal.</td></tr>
-          <tr><td><code>check_char(actual, expected)</code></td><td><code>1</code> when character values are equal.</td></tr>
-          <tr><td><code>check_string(actual, expected)</code></td><td><code>1</code> when NUL-terminated byte strings are equal.</td></tr>
-          <tr><td><code>check_between(value, minimum, maximum)</code></td><td><code>1</code> for an inclusive integer range match.</td></tr>
-          <tr><td><code>check_not_int(actual, unexpected)</code></td><td><code>1</code> when integer values differ.</td></tr>
-        </tbody>
-      </table>
-      <h2>Example</h2>
-      <pre><code>include "packages/testkit/0.1.0/src/testkit.basalt"
+  <header class="site-header">
+    <nav class="topbar" aria-label="Primary navigation">
+      <a class="brand" href="../../../"><span class="basalt-glyph" aria-hidden="true"></span><span>Basalt Registry</span></a>
+      <div class="nav-links">
+        <a href="../../../registry.json">JSON index</a>
+        <a href="https://github.com/memeviber/basalt-registry">GitHub</a>
+      </div>
+    </nav>
+    <div class="hero">
+      <p class="eyebrow">Package release · 0.1.0</p>
+      <h1>testkit</h1>
+      <p class="hero-lede">Pytest-inspired assertions and named test reporting for small Basalt fixtures. Dependency-free, deterministic and designed for CI-friendly exit codes.</p>
+      <div class="hero-meta" aria-label="Package facts">
+        <span><strong>9</strong> smoke cases</span>
+        <span><strong>0</strong> dependencies</span>
+        <span>source-first release</span>
+      </div>
+    </div>
+  </header>
 
-func main(): int {
-  let failures: int = 0;
-  if testkit::check_int(2 + 2, 4) == 0 then failures += 1;
-  return failures;
-}</code></pre>
-      <p><a href="Basalt.toml">Manifest</a> · <a href="src/testkit.basalt">Source</a> · <a href="../../../archives/testkit-0.1.0.tar.gz">Archive</a> · <a href="../../../index/testkit.json">Index JSON</a></p>
+  <main class="content">
+    <p class="breadcrumb"><a href="../../../">Basalt Registry</a> / testkit / <strong>0.1.0</strong></p>
+
+    <section class="surface package-hero" aria-labelledby="release-title">
+      <div>
+        <div class="package-title-row">
+          <div class="package-mark" aria-hidden="true">tk</div>
+          <h2 id="release-title">testkit <span class="version">0.1.0</span></h2>
+        </div>
+        <p>A compact assertion and reporting library that brings a familiar pytest-shaped workflow to Basalt source tests without requiring a framework runtime.</p>
+      </div>
+      <div class="release-actions">
+        <a class="button" href="../../../archives/testkit-0.1.0.tar.gz">Download archive</a>
+        <a class="button" href="src/testkit.basalt">View source</a>
+      </div>
     </section>
+
+    <div class="detail-layout">
+      <article class="surface readme">
+        <p class="section-label">README</p>
+        <h2>Assertions that read like tests</h2>
+        <p>Each assertion returns <code>1</code> for success and <code>0</code> for failure. Pass the result to <code>testkit::run</code> to print a named <code>PASSED</code> or <code>FAILED</code> line, add the returned failure count, and finish with <code>testkit::summary</code>.</p>
+
+        <h3>Import</h3>
+        <pre><code><span class="code-keyword">include</span> <span class="code-string">"packages/testkit/0.1.0/src/testkit.basalt"</span></code></pre>
+
+        <h3>API</h3>
+        <table class="api-table">
+          <thead><tr><th>Function</th><th>Behavior</th></tr></thead>
+          <tbody>
+            <tr><td><code>assert_true(actual)</code></td><td>Passes when a boolean expression is true.</td></tr>
+            <tr><td><code>assert_int(actual, expected)</code></td><td>Exact equality for integer values.</td></tr>
+            <tr><td><code>assert_bool(actual, expected)</code></td><td>Exact equality for boolean values.</td></tr>
+            <tr><td><code>assert_char(actual, expected)</code></td><td>Exact equality for character values.</td></tr>
+            <tr><td><code>assert_string(actual, expected)</code></td><td>Byte-oriented NUL-terminated string equality.</td></tr>
+            <tr><td><code>assert_between(value, minimum, maximum)</code></td><td>Inclusive integer range check.</td></tr>
+            <tr><td><code>assert_not_int(actual, unexpected)</code></td><td>Passes when integer values differ.</td></tr>
+            <tr><td><code>assert_f64_close(actual, expected, tolerance)</code></td><td>Absolute-difference floating-point check.</td></tr>
+            <tr><td><code>run(name, passed)</code></td><td>Prints a named result and returns a failure increment.</td></tr>
+            <tr><td><code>summary(total, failures)</code></td><td>Prints totals and returns the failure count.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Pytest-like fixture</h3>
+        <pre><code><span class="code-keyword">include</span> <span class="code-string">"packages/testkit/0.1.0/src/testkit.basalt"</span>
+
+<span class="code-keyword">func</span> main(): <span class="code-keyword">int</span> {
+  <span class="code-keyword">let</span> total: <span class="code-keyword">int</span> = 0;
+  <span class="code-keyword">let</span> failures: <span class="code-keyword">int</span> = 0;
+  total += 1;
+  failures += testkit::run(
+    <span class="code-string">"test_addition"</span>,
+    testkit::assert_int(2 + 2, 4)
+  );
+  <span class="code-keyword">return</span> testkit::summary(total, failures);
+}</code></pre>
+
+        <h3>Compatibility</h3>
+        <p>The original <code>check_*</code> functions remain available as aliases, so existing package fixtures can migrate incrementally to the clearer <code>assert_*</code> names.</p>
+      </article>
+
+      <aside class="surface sidebar" aria-labelledby="release-details">
+        <h2 id="release-details">Release details</h2>
+        <dl>
+          <dt>Version</dt>
+          <dd>0.1.0</dd>
+          <dt>License</dt>
+          <dd>MIT</dd>
+          <dt>Dependencies</dt>
+          <dd>None</dd>
+          <dt>Entry point</dt>
+          <dd><code>src/testkit.basalt</code></dd>
+          <dt>Archive</dt>
+          <dd><a href="../../../archives/testkit-0.1.0.tar.gz">testkit-0.1.0.tar.gz</a></dd>
+          <dt>SHA-256</dt>
+          <dd><code>03b6ab7b998f94ca8810e929e60e9c3aed1a9928f36f4c4dd5a3dd5b6a0bfa20</code></dd>
+        </dl>
+        <a class="button" href="../../../tests/testkit_smoke.basalt">Open smoke fixture</a>
+        <a class="button" href="../../../tests/run_testkit.py">Open test runner</a>
+        <a class="button" href="README.md">Read package README</a>
+      </aside>
+    </div>
   </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <p><a href="../../../">Back to Basalt Registry</a></p>
+      <p>Published from <code>main</code> root via GitHub Pages.</p>
+    </div>
+  </footer>
 </body>
 </html>

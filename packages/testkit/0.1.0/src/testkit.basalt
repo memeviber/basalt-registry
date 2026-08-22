@@ -1,23 +1,29 @@
-// testkit 0.1.0
-// Small dependency-free assertion helpers for Basalt examples and package tests.
-// Each checker returns 1 for pass and 0 for failure; callers choose the exit code.
+// Basalt testkit 0.1.0.
+// A dependency-free, pytest-inspired assertion and reporting library.
+// Assertions return 1 for pass and 0 for failure. `run` converts that
+// result into a readable test line and a process-friendly failure count.
 namespace testkit {
-  func check_int(actual: int, expected: int): int {
+  func assert_true(actual: bool): int {
+    if actual == true then return 1;
+    return 0;
+  }
+
+  func assert_int(actual: int, expected: int): int {
     if actual == expected then return 1;
     return 0;
   }
 
-  func check_bool(actual: bool, expected: bool): int {
+  func assert_bool(actual: bool, expected: bool): int {
     if actual == expected then return 1;
     return 0;
   }
 
-  func check_char(actual: char, expected: char): int {
+  func assert_char(actual: char, expected: char): int {
     if actual == expected then return 1;
     return 0;
   }
 
-  func check_string(actual: string, expected: string): int {
+  func assert_string(actual: string, expected: string): int {
     let i: int = 0;
     while actual[i] != '\0' && expected[i] != '\0' {
       if actual[i] != expected[i] then return 0;
@@ -27,14 +33,68 @@ namespace testkit {
     return 1;
   }
 
-  func check_between(value: int, minimum: int, maximum: int): int {
+  func assert_between(value: int, minimum: int, maximum: int): int {
     if value < minimum then return 0;
     if value > maximum then return 0;
     return 1;
   }
 
-  func check_not_int(actual: int, unexpected: int): int {
+  func assert_not_int(actual: int, unexpected: int): int {
     if actual == unexpected then return 0;
     return 1;
+  }
+
+  func assert_f64_close(actual: f64, expected: f64, tolerance: f64): int {
+    let delta: f64 = actual - expected;
+    if delta < 0.0 then delta = 0.0 - delta;
+    if delta <= tolerance then return 1;
+    return 0;
+  }
+
+  func run(name: string, passed: int): int {
+    if passed == 1 then {
+      print name ++ " PASSED\n";
+      return 0;
+    }
+    print name ++ " FAILED\n";
+    return 1;
+  }
+
+  func summary(total: int, failures: int): int {
+    print "==============================\n";
+    print "Basalt testkit summary\n";
+    print "total:";
+    print total;
+    print "\n";
+    print "failed:";
+    print failures;
+    print "\n";
+    if failures == 0 then print "RESULT: PASS\n"; else print "RESULT: FAIL\n";
+    return failures;
+  }
+
+  // Compatibility aliases retained for existing package consumers.
+  func check_int(actual: int, expected: int): int {
+    return assert_int(actual, expected);
+  }
+
+  func check_bool(actual: bool, expected: bool): int {
+    return assert_bool(actual, expected);
+  }
+
+  func check_char(actual: char, expected: char): int {
+    return assert_char(actual, expected);
+  }
+
+  func check_string(actual: string, expected: string): int {
+    return assert_string(actual, expected);
+  }
+
+  func check_between(value: int, minimum: int, maximum: int): int {
+    return assert_between(value, minimum, maximum);
+  }
+
+  func check_not_int(actual: int, unexpected: int): int {
+    return assert_not_int(actual, unexpected);
   }
 }

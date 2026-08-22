@@ -60,7 +60,7 @@ def write_metadata(digest: str) -> None:
     record = {
         "name": NAME,
         "version": VERSION,
-        "description": "A dependency-free assertion library for Basalt examples and package tests.",
+        "description": "Pytest-inspired assertions and named test reporting for small Basalt fixtures.",
         "archive": f"archives/{ARCHIVE_PATH.name}",
         "checksum": f"sha256:{digest}",
         "dependencies": {},

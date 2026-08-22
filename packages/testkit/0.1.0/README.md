@@ -1,6 +1,8 @@
 # testkit 0.1.0
 
-`testkit` is a tiny dependency-free assertion library for Basalt examples and package-manager fixtures. The helpers deliberately return `1` for success and `0` for failure, so a test can aggregate failures and return a conventional process status without hidden I/O or global state.
+`testkit` is a tiny, dependency-free assertion and reporting library for Basalt. It is designed for small package fixtures and follows the useful parts of a pytest workflow: tests have readable names, each case emits a `PASSED` or `FAILED` line, the runner aggregates failures, and the process returns a non-zero status when any assertion fails.
+
+The library has no global state, hidden allocation service, C header, or runtime dependency. Assertions return `1` for success and `0` for failure. `testkit::run` converts an assertion result into a named test report and returns `0` or `1`, while `testkit::summary` prints the final count and returns the number of failed tests.
 
 ## Import
 
@@ -12,28 +14,48 @@ include "packages/testkit/0.1.0/src/testkit.basalt"
 
 The registry package manager records this boundary explicitly; it does not rewrite source files or inject an implicit include path.
 
-## API
+## Assertion API
 
 | Function | Contract |
 |---|---|
-| `testkit::check_int(actual, expected)` | Returns `1` when two `int` values are equal. |
-| `testkit::check_bool(actual, expected)` | Returns `1` when two `bool` values are equal. |
-| `testkit::check_char(actual, expected)` | Returns `1` when two `char` values are equal. |
-| `testkit::check_string(actual, expected)` | Performs a byte-oriented NUL-terminated string equality check and returns `1` on equality. |
-| `testkit::check_between(value, minimum, maximum)` | Returns `1` when `value` is within the inclusive integer range. |
-| `testkit::check_not_int(actual, unexpected)` | Returns `1` when the integer values differ. |
+| `testkit::assert_true(actual)` | Passes when a boolean expression is `true`. |
+| `testkit::assert_int(actual, expected)` | Passes when two `int` values are equal. |
+| `testkit::assert_bool(actual, expected)` | Passes when two `bool` values are equal. |
+| `testkit::assert_char(actual, expected)` | Passes when two `char` values are equal. |
+| `testkit::assert_string(actual, expected)` | Performs byte-oriented NUL-terminated string equality. |
+| `testkit::assert_between(value, minimum, maximum)` | Passes for an inclusive integer range. |
+| `testkit::assert_not_int(actual, unexpected)` | Passes when two `int` values differ. |
+| `testkit::assert_f64_close(actual, expected, tolerance)` | Passes when the absolute difference is within `tolerance`. |
 
-## Minimal test
+The original `check_*` helpers remain as compatibility aliases for existing consumers.
+
+## Reporting API
+
+| Function | Contract |
+|---|---|
+| `testkit::run(name, passed)` | Prints `<name> PASSED` or `<name> FAILED`; returns `0` or `1`. |
+| `testkit::summary(total, failures)` | Prints a compact final summary and returns `failures`. |
+
+## Minimal pytest-like test
 
 ```basalt
 include "packages/testkit/0.1.0/src/testkit.basalt"
 
 func main(): int {
+  let total: int = 0;
   let failures: int = 0;
-  if testkit::check_int(2 + 2, 4) == 0 then failures += 1;
-  if testkit::check_string("ok", "ok") == 0 then failures += 1;
-  return failures;
+  total += 1;
+  failures += testkit::run("test_addition", testkit::assert_int(2 + 2, 4));
+  total += 1;
+  failures += testkit::run("test_contract", testkit::assert_true(7 >= 1));
+  return testkit::summary(total, failures);
 }
 ```
 
-No allocation, external C header, or runtime service is required by the library itself.
+The repository smoke fixture contains nine named cases, including a floating-point tolerance check and two assertions that verify mismatches are correctly rejected. Run it with the repository runner:
+
+```text
+python3 tests/run_testkit.py --compiler /path/to/basaltc
+```
+
+A successful run exits with status `0`; any failed case produces a non-zero status suitable for CI.
