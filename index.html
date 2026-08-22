@@ -74,8 +74,9 @@ python3 scripts/basalt_pkg.py \
   --root /path/to/project \
   --registry https://memeviber.github.io/basalt-registry \
   fetch testkit</code></pre>
-        <p>For current compiler versions, the package entry can be included explicitly from the vendored path:</p>
-        <pre><code><span class="code-keyword">include</span> <span class="code-string">"vendor/testkit/src/testkit.basalt"</span></code></pre>
+        <p>With the Bootstrap compiler, include the verified package through its version-explicit project-root prefix:</p>
+        <pre><code><span class="code-keyword">include</span> <span class="code-string">"@lib/testkit/0.1.0/src/testkit.basalt"</span></code></pre>
+        <p><code>@lib/</code> resolves to <code>.basalt/vendor/</code> from the project root. Legacy including-file-relative paths remain supported.</p>
       </section>
 
       <section class="surface info-card" aria-labelledby="contract-title">
