@@ -7,6 +7,7 @@ import gzip
 import hashlib
 import io
 import json
+import re
 import tarfile
 from pathlib import Path
 
@@ -55,7 +56,22 @@ def build_archive() -> str:
     return digest
 
 
+def update_package_page(digest: str) -> None:
+    page_path = PACKAGE_DIR / "index.html"
+    page = page_path.read_text(encoding="utf-8")
+    updated, replacements = re.subn(
+        r"(<dt>SHA-256</dt>\s*<dd><code>)[0-9a-f]{64}(</code>)",
+        rf"\g<1>{digest}\g<2>",
+        page,
+        count=1,
+    )
+    if replacements != 1:
+        raise SystemExit(f"package page must contain exactly one SHA-256 placeholder: {page_path}")
+    page_path.write_text(updated, encoding="utf-8")
+
+
 def write_metadata(digest: str) -> None:
+    update_package_page(digest)
     INDEX_DIR.mkdir(parents=True, exist_ok=True)
     record = {
         "name": NAME,

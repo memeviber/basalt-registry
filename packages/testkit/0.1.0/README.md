@@ -6,7 +6,14 @@ The library has no global state, hidden allocation service, C header, or runtime
 
 ## Import
 
-Until native package imports are enabled in the compiler, include the package entry explicitly from a workspace or a vendored path:
+Basalt supports short, explicit prefixes for source imports. Prefixes are anchored at the project root, meaning the directory from which the compiler is invoked:
+
+```basalt
+include "@stdlib/string.basalt"
+include "@lib/testkit/0.1.0/src/testkit.basalt"
+```
+
+`@stdlib/` resolves to `src/stdlib/` and `@lib/` resolves to `.basalt/vendor/`. The second form is available after the package manager has fetched and verified the library. The version remains explicit, so resolution never silently selects a different release. The older relative include form remains valid for compatibility:
 
 ```basalt
 include "packages/testkit/0.1.0/src/testkit.basalt"
@@ -59,3 +66,13 @@ python3 tests/run_testkit.py --compiler /path/to/basaltc
 ```
 
 A successful run exits with status `0`; any failed case produces a non-zero status suitable for CI.
+
+## High-volume stress fixture
+
+The package also includes `tests/testkit_stress.basalt`, which executes 35,000 assertions across integer equality, inclusive ranges, booleans, characters, floating-point tolerance and byte-oriented strings. It emits six named group results instead of one line per assertion, keeping the test readable while exercising the hot assertion paths:
+
+```text
+python3 tests/run_testkit_stress.py --compiler /path/to/basaltc --runs 5
+```
+
+The runner compiles with strict C11 warnings, executes the binary repeatedly, checks every expected result line and writes timing data to `.tmp/testkit-stress/benchmark.json`.

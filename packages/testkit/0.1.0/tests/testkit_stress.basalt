@@ -1,0 +1,60 @@
+include "../src/testkit.basalt"
+
+func main(): int {
+  let failures: int = 0;
+  let i: int = 0;
+  let group_failures: int = 0;
+
+  while i < 10000 {
+    if testkit::assert_int(i, i) == 0 then group_failures += 1;
+    i += 1;
+  }
+  failures += testkit::run("test_10000_int_assertions", testkit::assert_int(group_failures, 0));
+
+  i = 0;
+  group_failures = 0;
+  while i < 5000 {
+    if testkit::assert_between(i, 0, 4999) == 0 then group_failures += 1;
+    i += 1;
+  }
+  failures += testkit::run("test_5000_range_assertions", testkit::assert_int(group_failures, 0));
+
+  i = 0;
+  group_failures = 0;
+  while i < 5000 {
+    if i % 2 == 0 then {
+      if testkit::assert_bool(true, true) == 0 then group_failures += 1;
+    } else {
+      if testkit::assert_bool(false, false) == 0 then group_failures += 1;
+    }
+    i += 1;
+  }
+  failures += testkit::run("test_5000_bool_assertions", testkit::assert_int(group_failures, 0));
+
+  i = 0;
+  group_failures = 0;
+  while i < 5000 {
+    if testkit::assert_char('b', 'b') == 0 then group_failures += 1;
+    i += 1;
+  }
+  failures += testkit::run("test_5000_char_assertions", testkit::assert_int(group_failures, 0));
+
+  i = 0;
+  group_failures = 0;
+  while i < 5000 {
+    if testkit::assert_f64_close(1.0, 1.000001, 0.001) == 0 then group_failures += 1;
+    i += 1;
+  }
+  failures += testkit::run("test_5000_float_assertions", testkit::assert_int(group_failures, 0));
+
+  i = 0;
+  group_failures = 0;
+  while i < 5000 {
+    if testkit::assert_string("basalt", "basalt") == 0 then group_failures += 1;
+    i += 1;
+  }
+  failures += testkit::run("test_5000_string_assertions", testkit::assert_int(group_failures, 0));
+
+  print "assertions:35000\n";
+  return testkit::summary(6, failures);
+}

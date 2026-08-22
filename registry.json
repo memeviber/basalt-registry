@@ -8,7 +8,7 @@
       "description": "Pytest-inspired assertions and named test reporting for small Basalt fixtures.",
       "index": "index/testkit.json",
       "archive": "archives/testkit-0.1.0.tar.gz",
-      "checksum": "sha256:03b6ab7b998f94ca8810e929e60e9c3aed1a9928f36f4c4dd5a3dd5b6a0bfa20"
+      "checksum": "sha256:d33a0c2a9436cbc84bf2789e4f7ff7b08db08c0d6a97f76efc7cebafc21a666a"
     }
   ]
 }

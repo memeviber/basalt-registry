@@ -22,6 +22,7 @@
       <p class="hero-lede">Pytest-inspired assertions and named test reporting for small Basalt fixtures. Dependency-free, deterministic and designed for CI-friendly exit codes.</p>
       <div class="hero-meta" aria-label="Package facts">
         <span><strong>9</strong> smoke cases</span>
+        <span><strong>35,000</strong> stress assertions</span>
         <span><strong>0</strong> dependencies</span>
         <span>source-first release</span>
       </div>
@@ -52,7 +53,10 @@
         <p>Each assertion returns <code>1</code> for success and <code>0</code> for failure. Pass the result to <code>testkit::run</code> to print a named <code>PASSED</code> or <code>FAILED</code> line, add the returned failure count, and finish with <code>testkit::summary</code>.</p>
 
         <h3>Import</h3>
-        <pre><code><span class="code-keyword">include</span> <span class="code-string">"packages/testkit/0.1.0/src/testkit.basalt"</span></code></pre>
+        <pre><code><span class="code-keyword">include</span> <span class="code-string">"@lib/testkit/0.1.0/src/testkit.basalt"</span>
+
+<span class="code-comment">// Legacy relative paths remain supported.</span>
+<span class="code-keyword">include</span> <span class="code-string">"packages/testkit/0.1.0/src/testkit.basalt"</span></code></pre>
 
         <h3>API</h3>
         <table class="api-table">
@@ -85,8 +89,13 @@
   <span class="code-keyword">return</span> testkit::summary(total, failures);
 }</code></pre>
 
+        <h3>High-volume stress fixture</h3>
+        <p><code>tests/testkit_stress.basalt</code> executes 35,000 assertions across integer, range, boolean, character, floating-point tolerance and byte-oriented string checks. It reports six named groups to keep output compact while exercising every assertion path repeatedly.</p>
+        <pre><code>python3 tests/run_testkit_stress.py \
+  --compiler /path/to/basaltc --runs 5</code></pre>
+
         <h3>Compatibility</h3>
-        <p>The original <code>check_*</code> functions remain available as aliases, so existing package fixtures can migrate incrementally to the clearer <code>assert_*</code> names.</p>
+        <p>The original <code>check_*</code> functions remain available as aliases, so existing package fixtures can migrate incrementally to the clearer <code>assert_*</code> names. Prefix imports are project-root-relative: <code>@lib/</code> points into the verified <code>.basalt/vendor/</code> tree.</p>
       </article>
 
       <aside class="surface sidebar" aria-labelledby="release-details">
@@ -103,10 +112,11 @@
           <dt>Archive</dt>
           <dd><a href="../../../archives/testkit-0.1.0.tar.gz">testkit-0.1.0.tar.gz</a></dd>
           <dt>SHA-256</dt>
-          <dd><code>03b6ab7b998f94ca8810e929e60e9c3aed1a9928f36f4c4dd5a3dd5b6a0bfa20</code></dd>
+          <dd><code>d33a0c2a9436cbc84bf2789e4f7ff7b08db08c0d6a97f76efc7cebafc21a666a</code></dd>
         </dl>
         <a class="button" href="../../../tests/testkit_smoke.basalt">Open smoke fixture</a>
-        <a class="button" href="../../../tests/run_testkit.py">Open test runner</a>
+        <a class="button" href="tests/testkit_stress.basalt">Open stress fixture</a>
+        <a class="button" href="tests/run_testkit_stress.py">Open stress runner</a>
         <a class="button" href="README.md">Read package README</a>
       </aside>
     </div>
