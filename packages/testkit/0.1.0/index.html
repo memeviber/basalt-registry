@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>testkit 0.1.0 · Basalt Registry</title>
+  <style>
+    :root { color-scheme: light; --ink: #18212f; --muted: #5d6978; --line: #d9e1ea; --bg: #f5f7fb; --panel: #fff; --accent: #6d2d91; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 system-ui, sans-serif; }
+    main { width: min(820px, calc(100% - 32px)); margin: 0 auto; padding: 56px 0 72px; }
+    a { color: var(--accent); font-weight: 650; }
+    h1 { margin: 10px 0 0; font-size: clamp(2.2rem, 6vw, 4rem); line-height: 1; letter-spacing: -0.05em; }
+    h2 { margin-top: 34px; }
+    .muted { color: var(--muted); }
+    .panel { margin-top: 28px; padding: 26px; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; }
+    code, pre { font-family: "SFMono-Regular", Consolas, monospace; }
+    code { padding: 2px 5px; border-radius: 5px; background: #eef1f5; }
+    pre { overflow-x: auto; padding: 16px; border-radius: 10px; background: #202938; color: #edf2f7; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    th { color: var(--muted); font-size: 0.84rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  </style>
+</head>
+<body>
+  <main>
+    <a href="../../../">← Basalt Registry</a>
+    <h1>testkit <span class="muted">0.1.0</span></h1>
+    <p class="muted">A dependency-free assertion library for Basalt examples and package tests.</p>
+    <section class="panel">
+      <h2>API</h2>
+      <table>
+        <thead><tr><th>Function</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td><code>check_int(actual, expected)</code></td><td><code>1</code> when integer values are equal.</td></tr>
+          <tr><td><code>check_bool(actual, expected)</code></td><td><code>1</code> when boolean values are equal.</td></tr>
+          <tr><td><code>check_char(actual, expected)</code></td><td><code>1</code> when character values are equal.</td></tr>
+          <tr><td><code>check_string(actual, expected)</code></td><td><code>1</code> when NUL-terminated byte strings are equal.</td></tr>
+          <tr><td><code>check_between(value, minimum, maximum)</code></td><td><code>1</code> for an inclusive integer range match.</td></tr>
+          <tr><td><code>check_not_int(actual, unexpected)</code></td><td><code>1</code> when integer values differ.</td></tr>
+        </tbody>
+      </table>
+      <h2>Example</h2>
+      <pre><code>include "packages/testkit/0.1.0/src/testkit.basalt"
+
+func main(): int {
+  let failures: int = 0;
+  if testkit::check_int(2 + 2, 4) == 0 then failures += 1;
+  return failures;
+}</code></pre>
+      <p><a href="Basalt.toml">Manifest</a> · <a href="src/testkit.basalt">Source</a> · <a href="../../../archives/testkit-0.1.0.tar.gz">Archive</a> · <a href="../../../index/testkit.json">Index JSON</a></p>
+    </section>
+  </main>
+</body>
+</html>

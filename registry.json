@@ -1,0 +1,14 @@
+{
+  "name": "basalt-registry",
+  "format": 1,
+  "packages": [
+    {
+      "name": "testkit",
+      "latest": "0.1.0",
+      "description": "A dependency-free assertion library for Basalt examples and package tests.",
+      "index": "index/testkit.json",
+      "archive": "archives/testkit-0.1.0.tar.gz",
+      "checksum": "sha256:5c318339d31e5a39c7125447139034f923daa4884429a6f553e5acd4a7d2e0c6"
+    }
+  ]
+}

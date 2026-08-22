@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Basalt Registry</title>
+  <style>
+    :root { color-scheme: light; --ink: #18212f; --muted: #5d6978; --line: #d9e1ea; --panel: #ffffff; --accent: #9b4dca; --accent-dark: #6d2d91; --bg: #f5f7fb; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    main { width: min(980px, calc(100% - 40px)); margin: 0 auto; padding: 72px 0 80px; }
+    header { display: grid; gap: 16px; margin-bottom: 40px; }
+    .eyebrow { margin: 0; color: var(--accent-dark); font-size: 0.78rem; font-weight: 750; letter-spacing: 0.14em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(2.5rem, 7vw, 5rem); line-height: 0.98; letter-spacing: -0.055em; }
+    .lede { max-width: 700px; margin: 0; color: var(--muted); font-size: 1.15rem; }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 14px 34px rgba(31, 44, 65, 0.06); padding: 28px; }
+    .panel + .panel { margin-top: 20px; }
+    h2 { margin: 0 0 8px; font-size: 1.5rem; }
+    h3 { margin: 0; font-size: 1.2rem; }
+    p { margin: 8px 0 0; }
+    a { color: var(--accent-dark); font-weight: 650; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    .package { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: start; }
+    .version { display: inline-block; margin-left: 8px; padding: 2px 8px; border: 1px solid #d9b8e9; border-radius: 999px; color: var(--accent-dark); font-size: 0.78rem; font-weight: 700; vertical-align: 0.15em; }
+    .links { display: flex; flex-wrap: wrap; gap: 12px 18px; margin-top: 18px; }
+    .badge { min-width: 120px; padding: 12px 16px; border-radius: 12px; background: #f2e9f8; color: var(--accent-dark); text-align: center; font-weight: 750; }
+    code, pre { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; }
+    code { padding: 2px 5px; border-radius: 5px; background: #eef1f5; font-size: 0.92em; }
+    pre { overflow-x: auto; margin: 16px 0 0; padding: 18px; border-radius: 12px; background: #202938; color: #edf2f7; font-size: 0.9rem; }
+    .meta { display: grid; grid-template-columns: 150px 1fr; gap: 8px 16px; margin-top: 20px; color: var(--muted); font-size: 0.9rem; }
+    .meta strong { color: var(--ink); }
+    footer { margin-top: 28px; color: var(--muted); font-size: 0.9rem; }
+    @media (max-width: 640px) { main { width: min(100% - 24px, 980px); padding-top: 42px; } .panel { padding: 22px; } .package { grid-template-columns: 1fr; } .meta { grid-template-columns: 1fr; gap: 2px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">Static package registry</p>
+      <h1>Basalt Registry</h1>
+      <p class="lede">A transparent, source-first registry for small Basalt packages. Metadata is JSON, archives are checksummed, and every package remains browsable.</p>
+    </header>
+
+    <section class="panel" aria-labelledby="published-package">
+      <h2 id="published-package">Published package</h2>
+      <div class="package">
+        <div>
+          <h3><a href="packages/testkit/0.1.0/">testkit</a><span class="version">0.1.0</span></h3>
+          <p>A dependency-free assertion library for Basalt examples and package tests. Each checker returns <code>1</code> for pass and <code>0</code> for failure, so callers can aggregate a conventional process status.</p>
+          <div class="links">
+            <a href="packages/testkit/0.1.0/">Source and README</a>
+            <a href="packages/testkit/0.1.0/Basalt.toml">Manifest</a>
+            <a href="index/testkit.json">Package index</a>
+            <a href="archives/testkit-0.1.0.tar.gz">Download archive</a>
+            <a href="tests/testkit_smoke.basalt">Smoke fixture</a>
+          </div>
+        </div>
+        <div class="badge">No dependencies</div>
+      </div>
+      <div class="meta">
+        <strong>SHA-256</strong><span>21cab9992486afa3798d47a2c9bec2e5b4bbbd9a00484a9f822b20467db1ab05</span>
+        <strong>Entry</strong><span><code>src/testkit.basalt</code></span>
+        <strong>Format</strong><span>Static JSON index plus deterministic <code>.tar.gz</code> source archive</span>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="use-registry">
+      <h2 id="use-registry">Use the registry</h2>
+      <p>Point the Basalt package manager at this Pages origin. The package manager verifies the archive before materializing it under the local vendor directory.</p>
+      <pre><code>python3 scripts/basalt_pkg.py \
+  --root /path/to/project \
+  --registry https://memeviber.github.io/basalt-registry \
+  fetch</code></pre>
+      <p>Native package imports are intentionally separate from this static registry. Until that compiler feature lands, source can explicitly include the vendored package entry.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="contract">
+      <h2 id="contract">Registry contract</h2>
+      <p>Packages are source inputs, not executable plugins. This registry does not run package scripts, inject compiler flags, or hide dependencies. Each release includes a manifest, checksum, browsable source, and a reproducible archive.</p>
+      <p>See the machine-readable catalog at <a href="registry.json">registry.json</a> or the repository on <a href="https://github.com/memeviber/basalt-registry">GitHub</a>.</p>
+    </section>
+
+    <footer>Published from the <code>main</code> branch root through GitHub Pages.</footer>
+  </main>
+</body>
+</html>
